@@ -1,0 +1,83 @@
+{
+	"functions": [
+		{
+			"x": -300,
+			"y": 0,
+			"name": "main",
+			"actions": [
+				{
+					"type": "assign",
+					"variable": "foo",
+					"args": [
+						"gl_FragCoord.x"
+					]
+				},
+				{
+					"type": "function",
+					"name": "idk",
+					"args": [
+						1
+					]
+				},
+				{
+					"type": "power",
+					"variable": "foo",
+					"args": [
+						0.5
+					]
+				},
+				{
+					"type": "math",
+					"name": "sin",
+					"variable": "wave",
+					"args": [
+						"_time"
+					]
+				},
+				{
+					"type": "math",
+					"name": "max",
+					"variable": "wave",
+					"args": [
+						"wave",
+						0.25
+					]
+				},
+				{
+					"type": "output",
+					"args": [
+						"foo",
+						"wave",
+						1
+					]
+				}
+			]
+		},
+		{
+			"name": "idk",
+			"x": -300,
+			"y": -300,
+			"actions": [
+				{
+					"type": "subtract",
+					"variable": "foo",
+					"args": [
+						"gl_FragCoord.y"
+					]
+				},
+				{
+					"type": "divide",
+					"variable": "foo",
+					"args": [
+						"_window.x"
+					]
+				}
+			]
+		}
+	],
+	"variables": [
+		"foo",
+		"wave"
+	],
+	"freeBlocks": []
+}

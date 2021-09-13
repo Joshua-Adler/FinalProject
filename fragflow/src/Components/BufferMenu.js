@@ -2,7 +2,7 @@ import React from 'react'
 
 const styles = {
 	bufferMenu: {
-		backgroundColor: 'red',
+		backgroundColor: 'darkred',
 		width: '100%',
 		height: '100%'
 	}
