@@ -90,7 +90,6 @@ class Shader {
 		if (err.length > 0) {
 			console.error('There was a shader error!');
 			console.error(err);
-			throw err;
 		}
 	}
 

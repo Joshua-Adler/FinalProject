@@ -1,8 +1,8 @@
 {
 	"functions": [
 		{
-			"x": -300,
-			"y": 0,
+			"x": -700,
+			"y": 100,
 			"name": "main",
 			"actions": [
 				{
@@ -55,7 +55,7 @@
 		},
 		{
 			"name": "idk",
-			"x": -300,
+			"x": -550,
 			"y": -300,
 			"actions": [
 				{
@@ -79,5 +79,24 @@
 		"foo",
 		"wave"
 	],
-	"freeBlocks": []
+	"freeBlocks": [
+		[
+			{
+				"x": -50,
+				"y": 200,
+				"type": "add",
+				"variable": "wave",
+				"args": [
+					1
+				]
+			},
+			{
+				"type": "multiply",
+				"variable": "wave",
+				"args": [
+					0.5
+				]
+			}
+		]
+	]
 }

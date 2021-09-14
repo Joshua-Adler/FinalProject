@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 
 import Preview from '../components/Preview'
 import BlockArea from '../components/BlockArea'
-import BufferMenu from '../components/BufferMenu'
 import BlockSelector from '../components/BlockSelector'
 
 import baseProject from '../data/test.json'
@@ -13,11 +12,12 @@ const styles = {
 		position: 'relative',
 		height: '100%',
 		display: 'flex',
+		fontFamily: 'consolas'
 	},
-	vertFlex: {
-		display: 'flex',
-		flexDirection: 'column',
-		margin: '15px',
+	previewWrapper: {
+		position: 'absolute',
+		right: '0px',
+		top: '0px'
 	}
 }
 
@@ -34,7 +34,7 @@ export default function Editor(props) {
 
 	useEffect(() => {
 		if (projID !== 'new') {
-
+			
 		}
 	}, [projID]);
 
@@ -42,9 +42,8 @@ export default function Editor(props) {
 		<div style={styles.editor}>
 			<BlockSelector />
 			<BlockArea blocks={blocks} changeCount={changeCount} setChangeCount={setChangeCount} />
-			<div style={{ ...styles.vertFlex, marginLeft: 'auto' }}>
+			<div style={styles.previewWrapper}>
 				<Preview blocks={blocks} changeCount={changeCount} />
-				<BufferMenu />
 			</div>
 		</div>
 	)

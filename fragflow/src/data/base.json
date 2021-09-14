@@ -1,15 +1,15 @@
 {
 	"functions": [
 		{
-			"x": 0,
+			"x": -200,
 			"y": 0,
 			"name": "main",
-			"return": "void",
 			"actions": [
 				
 			]
 		}
 	],
-	"variables": {},
+	"variables": [
+	],
 	"freeBlocks": []
 }

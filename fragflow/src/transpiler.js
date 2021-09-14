@@ -32,7 +32,7 @@ function funcToString(func) {
 		}
 	} else {
 		code = `void ${func.name}(int _count) {\n`;
-		code += 'for(int i = 0; i < _count; i++) {\n';
+		code += '\tfor(int i = 0; i < _count; i++) {\n';
 		for (let action of func.actions) {
 			code += actionToString(action, 2);
 		}
@@ -73,6 +73,14 @@ let actStrFuncs = {
 }
 
 function actionToString(action, indentation) {
+	if(action.name === '_' || action.variable === '_') {
+		return '';
+	}
+	for(let arg of action.args) {
+		if(arg === '_') {
+			return '';
+		}
+	}
 	return actStrFuncs[action.type](action, indentation);
 }
 
