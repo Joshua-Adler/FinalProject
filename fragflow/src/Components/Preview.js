@@ -22,11 +22,11 @@ const styles = {
 		flexDirection: 'column',
 		border: '1px solid white',
 		userSelect: 'none',
-		paddingLeft: '10px',
-		paddingRight: '10px',
+		width: '150px',
 		height: '35px',
 		marginTop: 'auto',
-		marginBottom: 'auto'
+		marginBottom: 'auto',
+		textAlign: 'center'
 	}
 }
 
@@ -48,11 +48,21 @@ export default function Preview(props) {
 	}
 
 	useEffect(() => {
+		let cvs = document.getElementById('previewCanvas');
+
+		const updateCanvasDims = () => {
+			let dims = cvs.getBoundingClientRect();
+			cvs.width = dims.width * ratio;
+			cvs.height = dims.height * ratio;
+		}
+
 		window.addEventListener('resize', updateRatio);
+		cvs.addEventListener('fullscreenchange', updateCanvasDims);
 		return () => {
 			window.removeEventListener('resize', updateRatio);
+			cvs.removeEventListener('fullscreenchange', updateCanvasDims);
 		}
-	}, [])
+	}, [ratio]);
 
 	useLayoutEffect(() => {
 		// Build the shader from the blocks and makes it render in the canvas
@@ -68,7 +78,7 @@ export default function Preview(props) {
 
 		animatePreview = (keepGoing = true) => {
 			if (program !== null) {
-				program.frag.setUniform2f('_window', 512 * ratio, 288 * ratio);
+				program.frag.setUniform2f('_window', cvs.width, cvs.height);
 				program.frag.setUniform1f('_time', (Date.now() - anchorTime) / 1000);
 				program.draw();
 			}
@@ -82,7 +92,7 @@ export default function Preview(props) {
 
 	const play = () => {
 		if (animatePreview) {
-			requestAnimationFrame(animatePreview);
+			animReqID = requestAnimationFrame(animatePreview);
 		}
 		anchorTime += Date.now() - pauseTime;
 		setIsPaused(false);
@@ -103,6 +113,11 @@ export default function Preview(props) {
 		}
 	}
 
+	const fullscreen = async () => {
+		let cvs = document.getElementById('previewCanvas');
+		await cvs.requestFullscreen();
+	}
+
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column' }}>
 			<canvas style={styles.viewport} id='previewCanvas'
@@ -114,6 +129,7 @@ export default function Preview(props) {
 					<div onClick={pause} style={styles.controlButton}>Pause</div>
 				}
 				<div onClick={restart} style={styles.controlButton}>Restart</div>
+				<div onClick={fullscreen} style={styles.controlButton}>Full Screen</div>
 			</div>
 		</div>
 	)

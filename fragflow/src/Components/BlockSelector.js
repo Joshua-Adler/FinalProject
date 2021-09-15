@@ -9,7 +9,7 @@ const styles = {
 		width: '200px',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'end'
+		justifyContent: 'end',
 	},
 	category: {
 		height: '100px',

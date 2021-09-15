@@ -6,4 +6,10 @@ body {
 	flex-direction: column;
 	height: 100vh;
 	font-size: 125%;
+	font-family: arial;
+}
+
+input, button {
+	font-size: 100%;
+	font-family: arial;
 }

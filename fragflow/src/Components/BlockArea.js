@@ -1,19 +1,13 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
+// I didn't really have time to plan out this code before making it, so it's a mess. :)
+
+import React, { useState, useRef, useLayoutEffect } from 'react'
 
 import { mathFuncs, colors, dispNames, keywords } from '../global-consts'
 
 const styles = {
 	blockArea: {
-		marginBottom: '5px',
 		width: '100%',
 		display: 'block',
-	},
-	anchor: {
-		width: '1000000px',
-		height: '1000000px',
-		position: 'relative',
-		left: '-500000px',
-		top: '-500000px',
 	},
 	canvas: {
 		width: '100%',
@@ -680,7 +674,6 @@ function deleteFunc(func) {
 			break;
 		}
 	}
-	console.log(index);
 	if (index === -1) {
 		return;
 	}
@@ -764,6 +757,12 @@ export default function BlockArea(props) {
 			}
 		}
 
+		const unsave = () => {
+			if(props.isSaved !== ' ') {
+				props.setIsSaved(false);
+			}
+		}
+
 		const mousedown = (e) => {
 			updateMouse(e);
 			drawSelector();
@@ -829,6 +828,9 @@ export default function BlockArea(props) {
 			} else {
 				isPanning = true;
 			}
+			if(dragID !== null) {
+				unsave();
+			}
 		}
 
 		const mousemove = (e) => {
@@ -843,6 +845,7 @@ export default function BlockArea(props) {
 				}
 				drawBlocks();
 			} else if (dragID !== null) {
+				unsave();
 				let block = handleSelection({ primary: dragID, argument: 0 });
 				if (isChrome) {
 					block.x += e.movementX / 2 ** zoom;
@@ -859,6 +862,7 @@ export default function BlockArea(props) {
 			updateMouse(e);
 			isPanning = false;
 			if (dragID !== null) {
+				unsave();
 				let block = handleSelection({ primary: dragID, argument: 0 });
 				if (block.args) {
 					if (mouseX < 0) {
@@ -902,8 +906,8 @@ export default function BlockArea(props) {
 				} else {
 					let id = getPositionSelection(mouseX, mouseY);
 					if (id !== null) {
+						let action = handleSelection({ primary: id.primary, argument: 0 });
 						if (id.argument > 0) {
-							let action = handleSelection({ primary: id.primary, argument: 0 });
 							if (block.type === 'function'
 								&& action.type === 'function' && id.argument === 1) {
 								action.name = block.name;
@@ -912,6 +916,10 @@ export default function BlockArea(props) {
 							} else if (block.type === 'variable'
 								&& (!(block.name in dispNames || action.type === 'function')
 									|| id.argument > 1)) {
+								handleSelection(id, block.name);
+								deleteFreeBlock(block);
+								props.setChangeCount(props.changeCount + 1);
+							} else if(block.type === 'variable' && action.type === 'output') {
 								handleSelection(id, block.name);
 								deleteFreeBlock(block);
 								props.setChangeCount(props.changeCount + 1);
@@ -940,7 +948,7 @@ export default function BlockArea(props) {
 			ctx.canvas.removeEventListener('mousedown', mousedown);
 			document.removeEventListener('mouseup', mouseup);
 		}
-	}, [props])
+	}, [props]);
 
 	return (
 		<div ref={ref} style={styles.blockArea}>
