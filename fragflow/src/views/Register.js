@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 
 import { baseURL } from '../global-consts'
+import { styles } from './Login'
 
 const registerSchema = Yup.object().shape({
 	username: Yup.string().required('Required'),
@@ -23,12 +24,12 @@ export default function Register(props) {
 	const [error, setError] = useState('')
 
 	useEffect(() => {
-		document.title = 'Fragflow | Login';
+		document.title = 'Fragflow | Register';
 	});
 
 	const handleSubmit = (username, password) => {
 		setError('');
-		axios.post('http://localhost:5000/api/register', {
+		axios.post(`${baseURL}/api/register`, {
 			username: username,
 			password: password
 		}).then((response) => {
@@ -50,69 +51,39 @@ export default function Register(props) {
 		});
 	}
 
-	const styles = {
-		error: {
-			color: '#F76356',
-			position: 'absolute'
-		},
-		spaced: {
-			marginTop: '40px'
-		},
-		// Form styles modified from w3schools
-		field: {
-			width: '100%',
-			padding: '12px 20px',
-			margin: '8px 0',
-			display: 'inline-block',
-			border: '1px solid dimgray',
-			borderRadius: '4px',
-			boxSizing: 'border-box',
-			backgroundColor: '#131313',
-			color: 'white'
-		},
-		button: {
-			width: '100%',
-			backgroundColor: '#4CAF50',
-			color: 'white',
-			padding: '14px 20px',
-			margin: '8px 0',
-			border: 'none',
-			borderRadius: '4px',
-			cursor: 'pointer'
-		}
-	}
-
 	return (
 		<div style={{ margin: 'auto', marginTop: '100px', width: '50vw' }}>
 			{redirect ? <Redirect to={{ pathname: '/' }} /> : null}
-			<h1 style={{textAlign: 'center'}}>Registration</h1>
+			<h1 style={{ textAlign: 'center' }}>Registration</h1>
 			<Formik initialValues={registerInitVals}
 				validationSchema={registerSchema}
 				onSubmit={(values) => handleSubmit(values.username, values.password)}>
 				{({ errors, touched }) => (
 					<Form>
-						<label style={styles.spaced} htmlFor='username'>Username: </label>
+						<label style={styles.spaced} htmlFor='username'>Username </label>
 						<Field style={styles.field} name='username' />
 						{errors.username && touched.username ?
 							<div style={styles.error}>{errors.username}</div> : null}
 						<br />
 						<br />
 						<br />
-						<label style={styles.spaced} htmlFor='password'>Password: </label>
+						<label style={styles.spaced} htmlFor='password'>Password </label>
 						<Field style={styles.field} type='password' name='password' />
 						{errors.password && touched.password ?
 							<div style={styles.error}>{errors.password}</div> : null}
 						<br />
 						<br />
 						<br />
-						<label style={styles.spaced} htmlFor='confirm'>Confirm Password: </label>
+						<label style={styles.spaced} htmlFor='confirm'>Confirm Password </label>
 						<Field style={styles.field} type='password' name='confirm' />
 						{errors.confirm && touched.confirm ?
 							<div style={styles.error}>{errors.confirm}</div> : null}
 						<br />
 						<br />
 						<br />
-						<button style={{...styles.button, fontSize: '100%'}} type='submit'>Register</button>
+						<div style={{ display: 'flex', justifyContent: 'center' }}>
+							<button style={{ ...styles.button, fontSize: '100%' }} type='submit'>Register</button>
+						</div>
 					</Form>
 				)}
 			</Formik>

@@ -52,8 +52,9 @@ export default function Preview(props) {
 
 		const updateCanvasDims = () => {
 			let dims = cvs.getBoundingClientRect();
-			cvs.width = dims.width * ratio;
-			cvs.height = dims.height * ratio;
+			// Rounding to resolve truncation issues
+			cvs.width = Math.round(dims.width * ratio);
+			cvs.height = Math.round(dims.height * ratio);
 		}
 
 		window.addEventListener('resize', updateRatio);

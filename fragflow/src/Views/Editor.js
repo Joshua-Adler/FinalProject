@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
+import axios from 'axios'
 
 import Preview from '../components/Preview'
 import BlockArea from '../components/BlockArea'
 import BlockSelector from '../components/BlockSelector'
 
 import baseProject from '../data/base.json'
+
+import { baseURL } from './../global-consts'
 
 const styles = {
 	editor: {
@@ -31,35 +34,69 @@ export default function Editor(props) {
 	const [redir, setRedir] = useState(null);
 	const needsLoading = useRef(true);
 
-	/* eslint-disable */
-	//Shut up, there is no infinite loop
+	// Shut up, there is no infinite loop
+	// eslint-disable-next-line
 	useEffect(() => {
-		/*es-lint enable*/
 		if (needsLoading.current) {
 			needsLoading.current = false;
-			console.log('test');
 			let path = location.pathname.split('/');
 			projID = path[path.length - 1];
 			if (projID !== 'new') {
-				props.setIsSaved(' ');
-				props.setProjName(projID);
-				let blockStr = localStorage.getItem(projID);
-				setBlocks(JSON.parse(blockStr));
+				axios.get(`${baseURL}/api/project?id=${projID}`).then((response) => {
+					props.setProjName(response.data.name);
+					setBlocks(JSON.parse(response.data.blocks));
+					document.title = `Fragflow | ${response.data.name}`;
+					if (props.user.id === response.data.author_id) {
+						props.setIsSaved('Saved');
+					} else {
+						props.setIsSaved(' ');
+					}
+				}).catch((error) => {
+					setRedir('new');
+					needsLoading.current = true;
+				})
+				document.title = 'Fragflow | Loading...';
 			} else {
 				setBlocks(baseProject);
 				props.setProjName('Untitled Project');
-				props.setIsSaved(false);
-				document.title = `Fragflow | New Project`;
+				if (props.token) {
+					props.setIsSaved(false);
+				} else {
+					props.setIsSaved(' ');
+				}
+				document.title = `Fragflow | Untitled Project`;
 			}
 		}
 	});
 
 	useEffect(() => {
-		const saveNewProject = () => {
+		const saveNewProject = (name) => {
 			let blockStr = JSON.stringify(blocks);
-			localStorage.setItem('123', blockStr);
-			setRedir(123);
-			needsLoading.current = true;
+			axios.post(`${baseURL}/api/project`, {
+				token: props.token,
+				blocks: blockStr,
+				name
+			}).then((response) => {
+				setRedir(response.data.id);
+				needsLoading.current = true;
+			}).catch((error) => {
+				alert('There was an error saving your project.');
+				console.log(error);
+			})
+		}
+
+		const saveProject = () => {
+			axios.patch(`${baseURL}/api/project`, {
+				token: props.token,
+				project_id: projID,
+				blocks: JSON.stringify(blocks)
+			}).then((response) => {
+				props.setIsSaved('Saved');
+			}).catch((error) => {
+				alert('There was an error saving your project.');
+				props.setIsSaved(null);
+				console.log(error);
+			})
 		}
 
 		const save = (e) => {
@@ -71,13 +108,16 @@ export default function Editor(props) {
 						if (projID === 'new') {
 							let name = prompt('Project Name');
 							if (name !== null && name.length > 0) {
+								while (name === null || name.length > 32) {
+									name = prompt('Project Name (less than 33 characters)');
+								}
 								props.setIsSaved('Saving...');
-								saveNewProject();
+								saveNewProject(name);
 							}
 						} else {
-
+							props.setIsSaved('Saving...');
+							saveProject();
 						}
-						//props.setIsSaved('Saved');
 					}
 				}
 			}

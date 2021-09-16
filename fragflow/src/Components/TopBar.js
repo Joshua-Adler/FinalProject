@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, Redirect } from 'react-router-dom'
 
 const styles = {
 	topBar: {
@@ -15,7 +15,8 @@ const styles = {
 		justifyContent: 'center',
 		height: 'auto',
 		marginLeft: '20px',
-		textDecoration: 'none'
+		textDecoration: 'none',
+		color: 'white'
 	},
 	title: {
 		marginRight: '85px',
@@ -26,9 +27,20 @@ const styles = {
 
 export default function TopBar(props) {
 	const location = useLocation();
+	const [redir, setRedir] = useState(false);
+	let path = location.pathname.split('/');
+
+	const logout = () => {
+		props.setToken(null);
+		setRedir(true);
+	}
+
 	return (
 		<div style={styles.topBar}>
-			<div style={{ ...styles.barItem, ...styles.title }}>Fragflow</div>
+			{redir ?
+				<Redirect to={{ pathname: '/' }} />
+				: ''}
+			<Link to='/' style={{ ...styles.barItem, ...styles.title }}>Fragflow</Link>
 			{props.isSaved !== null ?
 				<>
 					<div style={styles.barItem}>{props.projName}</div>
@@ -37,20 +49,26 @@ export default function TopBar(props) {
 						:
 						<div style={{ ...styles.barItem, color: 'yellow' }}>Ctrl+S to Save</div>}
 				</>
-			: ''}
-			{!location.pathname.split('/').includes('editor') ? 
-				<Link to='/editor/new' style={{...styles.barItem, color: 'lightgray'}}>New Project</Link>
-			: ''}
-			<div style={{ margin: 'auto' }}></div>
+				: ''}
+			{!path.includes('editor') ?
+				<Link to='/editor/new' style={{ ...styles.barItem, color: 'lightgray' }}>New Project</Link>
+				: ''}
 			{props.token ?
 				<>
-				<div style={{...styles.barItem}}>{props.username}</div>
-				<div style={{...styles.barItem, color: 'gray'}}>Log Out</div>
+					<div style={{ margin: 'auto' }}></div>
+					<div style={{ ...styles.barItem }}>{props.user.name}</div>
+					<div onClick={logout} style={{ ...styles.barItem, color: 'gray' }}>Log Out</div>
 				</>
 				:
 				<>
-				<Link to='/login' style={{...styles.barItem, color: 'lightgray'}}>Log In</Link>
-				<Link to='/register' style={{...styles.barItem, color: 'lightgray'}}>Register</Link>
+					{path.includes('new') ?
+						<div style={{ ...styles.barItem, color: 'red' }}>
+							You must be logged in to save a project
+						</div>
+						: ''}
+					<div style={{ margin: 'auto' }}></div>
+					<Link to='/login' style={{ ...styles.barItem, color: 'lightgray' }}>Log In</Link>
+					<Link to='/register' style={{ ...styles.barItem, color: 'lightgray' }}>Register</Link>
 				</>
 			}
 			<div style={{ margin: '20px' }}></div>

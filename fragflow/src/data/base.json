@@ -5,7 +5,12 @@
 			"y": 0,
 			"name": "main",
 			"actions": [
-				
+				{
+				"type": "output",
+				"args": [
+					0.1, 0.3, 0.3
+				]
+				}
 			]
 		}
 	],

@@ -13,3 +13,18 @@ input, button {
 	font-size: 100%;
 	font-family: arial;
 }
+
+table {
+	width: 50vw;
+	border-radius: 10px;
+}
+
+th, td {
+	outline: 2px solid gray;
+	text-align: left;
+	padding: 8px;
+}
+
+.projectData:hover {
+	background-color: #242728;
+}

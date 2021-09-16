@@ -28,7 +28,7 @@ var isPanning;
 // For the block selector
 var scroll = 0;
 // Determines which block selection category to show
-var selectorCategory = 'variable';
+var selectorCategory = 'action';
 // Keep the blocks in a place that can be globally accessed
 var blocks = null;
 // Mouse coordinates
@@ -53,6 +53,9 @@ var curSelectorBlock = null;
 var lastFuncIndex = 0;
 var lastActIndex = 0;
 
+// To allow unsave() to be called
+var unsave = null;
+
 export function changeSelectorCategory(category) {
 	selectorCategory = category;
 	scroll = 0;
@@ -68,6 +71,7 @@ export function newVariable() {
 	if (checkName(name)) {
 		blocks.variables.push(name);
 		drawBlocks();
+		unsave();
 	}
 }
 
@@ -95,6 +99,7 @@ export function deleteVariable() {
 		i++;
 	}
 	drawBlocks();
+	unsave();
 }
 
 function wipeAction(act, name) {
@@ -120,11 +125,12 @@ export function newFunction() {
 	if (checkName(name)) {
 		blocks.functions.push({
 			name,
-			x: panX,
-			y: panY,
+			x: -panX / 2 ** zoom,
+			y: -panY / 2 ** zoom,
 			actions: []
 		});
 		drawBlocks();
+		unsave();
 	}
 }
 
@@ -757,7 +763,7 @@ export default function BlockArea(props) {
 			}
 		}
 
-		const unsave = () => {
+		unsave = () => {
 			if(props.isSaved !== ' ') {
 				props.setIsSaved(false);
 			}
@@ -949,6 +955,11 @@ export default function BlockArea(props) {
 			document.removeEventListener('mouseup', mouseup);
 		}
 	}, [props]);
+
+	useLayoutEffect(() => {
+		blocks = props.blocks;
+		drawBlocks();
+	}, [props.blocks])
 
 	return (
 		<div ref={ref} style={styles.blockArea}>
