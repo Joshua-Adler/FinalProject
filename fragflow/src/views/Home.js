@@ -20,10 +20,6 @@ export default function Home(props) {
 		}
 	}, [projects]);
 
-	const styles = {
-
-	}
-
 	return (
 		<div style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '100px' }}>
 			{redir ? <Redirect to={{ pathname: `editor/${redir}` }} /> : ''}
@@ -32,7 +28,7 @@ export default function Home(props) {
 					<tr>
 						<th>Author</th>
 						<th style={{ width: '50%' }}>Name</th>
-						<th>Creation Date</th>
+						<th>Date Created</th>
 					</tr>
 				</thead>
 				<tbody>

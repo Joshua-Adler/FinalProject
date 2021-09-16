@@ -27,12 +27,26 @@ const styles = {
 
 var projID = 'new';
 
+export var deleteProject;
+
 export default function Editor(props) {
 	const location = useLocation();
 	const [blocks, setBlocks] = useState(baseProject);
 	const [changeCount, setChangeCount] = useState(0);
 	const [redir, setRedir] = useState(null);
 	const needsLoading = useRef(true);
+
+	deleteProject = () => {
+		if(window.confirm(`Delete ${props.projName}? This action can not be undone.`)) {
+			axios.delete(`${baseURL}/api/project?id=${projID}&token=${props.token}`)
+			.then((response) => {
+				setRedir('');
+			}).catch((error) => {
+				alert('There was an error deleting the project.');
+				console.error(error);
+			})
+		}
+	}
 
 	// Shut up, there is no infinite loop
 	// eslint-disable-next-line
@@ -46,13 +60,13 @@ export default function Editor(props) {
 					props.setProjName(response.data.name);
 					setBlocks(JSON.parse(response.data.blocks));
 					document.title = `Fragflow | ${response.data.name}`;
-					if (props.user.id === response.data.author_id) {
+					if (props.token && props.user.id === response.data.author_id) {
 						props.setIsSaved('Saved');
 					} else {
 						props.setIsSaved(' ');
 					}
 				}).catch((error) => {
-					setRedir('new');
+					setRedir('editor/new');
 					needsLoading.current = true;
 				})
 				document.title = 'Fragflow | Loading...';
@@ -77,7 +91,7 @@ export default function Editor(props) {
 				blocks: blockStr,
 				name
 			}).then((response) => {
-				setRedir(response.data.id);
+				setRedir(`editor/${response.data.id}`);
 				needsLoading.current = true;
 			}).catch((error) => {
 				alert('There was an error saving your project.');
@@ -100,10 +114,10 @@ export default function Editor(props) {
 		}
 
 		const save = (e) => {
-			if (props.isSaved !== 'Saved' && e.ctrlKey) {
-				let key = String.fromCharCode(e.keyCode).toLowerCase();
-				if (key === 's') {
-					e.preventDefault();
+			let key = String.fromCharCode(e.keyCode).toLowerCase();
+			if (key === 's') {
+				e.preventDefault();
+				if (props.isSaved !== 'Saved' && e.ctrlKey) {
 					if (props.isSaved === false) {
 						if (projID === 'new') {
 							let name = prompt('Project Name');
@@ -131,8 +145,8 @@ export default function Editor(props) {
 
 	return (
 		<div style={styles.editor}>
-			{redir ?
-				<Redirect to={{ pathname: `/editor/${redir}` }} />
+			{redir !== null ?
+				<Redirect to={{ pathname: `/${redir}` }} />
 				: ''}
 			<BlockSelector />
 			<BlockArea blocks={blocks} changeCount={changeCount} setChangeCount={setChangeCount}

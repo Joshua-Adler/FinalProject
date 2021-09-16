@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { Link, useLocation, Redirect } from 'react-router-dom'
 
+import { deleteProject } from '../views/Editor'
+
 const styles = {
 	topBar: {
 		backgroundColor: '#212426',
@@ -22,6 +24,12 @@ const styles = {
 		marginRight: '85px',
 		fontWeight: 'bold',
 		fontSize: '125%'
+	},
+	delete: {
+		position: 'absolute',
+		top: '21px',
+		right: '50%',
+		color: '#FCC'
 	}
 }
 
@@ -32,6 +40,7 @@ export default function TopBar(props) {
 
 	const logout = () => {
 		props.setToken(null);
+		localStorage.removeItem('token');
 		setRedir(true);
 	}
 
@@ -48,6 +57,12 @@ export default function TopBar(props) {
 						<div style={{ ...styles.barItem, color: 'dimgray' }}>{props.isSaved}</div>
 						:
 						<div style={{ ...styles.barItem, color: 'yellow' }}>Ctrl+S to Save</div>}
+					{props.isSaved !== ' ' && !path.includes('new') ?
+						<div onClick={deleteProject}
+							style={{ ...styles.barItem, ...styles.delete, userSelect: 'none' }}>
+							Delete Project
+						</div>
+						: ''}
 				</>
 				: ''}
 			{!path.includes('editor') ?
@@ -57,12 +72,14 @@ export default function TopBar(props) {
 				<>
 					<div style={{ margin: 'auto' }}></div>
 					<div style={{ ...styles.barItem }}>{props.user.name}</div>
-					<div onClick={logout} style={{ ...styles.barItem, color: 'gray' }}>Log Out</div>
+					<div onClick={logout} style={{ ...styles.barItem, color: 'gray', userSelect: 'none' }}>
+						Log Out
+					</div>
 				</>
 				:
 				<>
 					{path.includes('new') ?
-						<div style={{ ...styles.barItem, color: 'red' }}>
+						<div style={{ ...styles.barItem, color: 'orange' }}>
 							You must be logged in to save a project
 						</div>
 						: ''}

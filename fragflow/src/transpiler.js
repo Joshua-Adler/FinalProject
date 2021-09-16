@@ -32,7 +32,7 @@ function funcToString(func) {
 		}
 	} else {
 		code = `void ${func.name}(int _count) {\n`;
-		code += '\tfor(int i = 0; i < _count; i++) {\n';
+		code += '\tfor(int _i = 0; _i < _count; _i++) {\n';
 		for (let action of func.actions) {
 			code += actionToString(action, 2);
 		}

@@ -958,6 +958,9 @@ export default function BlockArea(props) {
 
 	useLayoutEffect(() => {
 		blocks = props.blocks;
+		panX = 0;
+		panY = 0;
+		zoom = 0;
 		drawBlocks();
 	}, [props.blocks])
 

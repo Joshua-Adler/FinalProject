@@ -20,7 +20,7 @@ table {
 }
 
 th, td {
-	outline: 2px solid gray;
+	outline: 2px solid slategray;
 	text-align: left;
 	padding: 8px;
 }

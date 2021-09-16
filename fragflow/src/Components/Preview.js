@@ -91,6 +91,10 @@ export default function Preview(props) {
 		animReqID = requestAnimationFrame(animatePreview);
 	}, [props.blocks, ratio, props.changeCount]);
 
+	useEffect(() => {
+		anchorTime = Date.now();
+	}, [props.blocks]);
+
 	const play = () => {
 		if (animatePreview) {
 			animReqID = requestAnimationFrame(animatePreview);
