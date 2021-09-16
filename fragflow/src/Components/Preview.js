@@ -45,6 +45,7 @@ export default function Preview(props) {
 
 	const updateRatio = () => {
 		setRatio(window.devicePixelRatio);
+		animatePreview(false);
 	}
 
 	useEffect(() => {
@@ -80,16 +81,20 @@ export default function Preview(props) {
 		animatePreview = (keepGoing = true) => {
 			if (program !== null) {
 				program.frag.setUniform2f('_window', cvs.width, cvs.height);
-				program.frag.setUniform1f('_time', (Date.now() - anchorTime) / 1000);
+				if (isPaused) {
+					program.frag.setUniform1f('_time', (pauseTime - anchorTime) / 1000);
+				} else {
+					program.frag.setUniform1f('_time', (Date.now() - anchorTime) / 1000);
+				}
 				program.draw();
 			}
-			if (keepGoing) {
+			if (!isPaused && keepGoing) {
 				animReqID = requestAnimationFrame(animatePreview);
 			}
 		}
 
 		animReqID = requestAnimationFrame(animatePreview);
-	}, [props.blocks, ratio, props.changeCount]);
+	}, [props.blocks, ratio, props.changeCount, isPaused]);
 
 	useEffect(() => {
 		anchorTime = Date.now();
@@ -97,7 +102,7 @@ export default function Preview(props) {
 
 	const play = () => {
 		if (animatePreview) {
-			animReqID = requestAnimationFrame(animatePreview);
+			//animReqID = requestAnimationFrame(animatePreview);
 		}
 		anchorTime += Date.now() - pauseTime;
 		setIsPaused(false);
