@@ -22,7 +22,7 @@ export default function Home(props) {
 
 	return (
 		<div style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '100px' }}>
-			{redir ? <Redirect to={{ pathname: `editor/${redir}` }} /> : ''}
+			{redir ? <Redirect to={{ pathname: `/FinalProject/editor/${redir}` }} /> : ''}
 			<table>
 				<thead>
 					<tr>

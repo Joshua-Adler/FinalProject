@@ -146,7 +146,7 @@ export default function Editor(props) {
 	return (
 		<div style={styles.editor}>
 			{redir !== null ?
-				<Redirect to={{ pathname: `/${redir}` }} />
+				<Redirect to={{ pathname: `/FinalProject/${redir}` }} />
 				: ''}
 			<BlockSelector />
 			<BlockArea blocks={blocks} changeCount={changeCount} setChangeCount={setChangeCount}

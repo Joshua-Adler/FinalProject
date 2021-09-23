@@ -50,14 +50,14 @@ function App() {
 				<TopBar isSaved={isSaved} token={token} user={user}
 					setToken={setToken} projName={projName} />
 				<Switch>
-					<Route exact path='/editor'><Redirect to={{ pathname: '/editor/new' }} /></Route>
-					<Route path='/editor'>
+					<Route exact path='/FinalProject/editor'><Redirect to={{ pathname: '/FinalProject/editor/new' }} /></Route>
+					<Route path='/FinalProject/editor'>
 						<Editor isSaved={isSaved} setIsSaved={setIsSaved} setProjName={setProjName}
 							token={token} user={user} projName={projName} />
 					</Route>
-					<Route exact path='/'><Home token={token} user={user} /></Route>
-					<Route exact path='/login'><Login setToken={setToken} /></Route>
-					<Route exact path='/register'><Register setToken={setToken} /></Route>
+					<Route exact path='/FinalProject/'><Home token={token} user={user} /></Route>
+					<Route exact path='/FinalProject/login'><Login setToken={setToken} /></Route>
+					<Route exact path='/FinalProject/register'><Register setToken={setToken} /></Route>
 				</Switch>
 			</div>
 		);

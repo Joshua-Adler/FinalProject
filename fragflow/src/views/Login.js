@@ -83,7 +83,7 @@ export default function Login(props) {
 
 	return (
 		<div style={{ margin: 'auto', marginTop: '100px', width: '50vw' }}>
-			{redirect ? <Redirect to={{ pathname: '/' }} /> : null}
+			{redirect ? <Redirect to={{ pathname: '/FinalProject/' }} /> : null}
 			<h1 style={{ textAlign: 'center' }}>Login</h1>
 			<Formik initialValues={loginInitVals} validationSchema={loginSchema}
 				onSubmit={(values) => handleSubmit(values.username, values.password)}>

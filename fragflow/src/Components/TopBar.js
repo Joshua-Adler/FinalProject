@@ -47,7 +47,7 @@ export default function TopBar(props) {
 	return (
 		<div style={styles.topBar}>
 			{redir ?
-				<Redirect to={{ pathname: '/' }} />
+				<Redirect to={{ pathname: '/FinalProject/' }} />
 				: ''}
 			<Link to='/' style={{ ...styles.barItem, ...styles.title }}>Fragflow</Link>
 			{props.isSaved !== null ?

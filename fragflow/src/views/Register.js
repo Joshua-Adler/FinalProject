@@ -53,7 +53,7 @@ export default function Register(props) {
 
 	return (
 		<div style={{ margin: 'auto', marginTop: '100px', width: '50vw' }}>
-			{redirect ? <Redirect to={{ pathname: '/' }} /> : null}
+			{redirect ? <Redirect to={{ pathname: '/FinalProject/' }} /> : null}
 			<h1 style={{ textAlign: 'center' }}>Registration</h1>
 			<Formik initialValues={registerInitVals}
 				validationSchema={registerSchema}
