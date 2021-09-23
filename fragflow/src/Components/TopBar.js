@@ -49,7 +49,7 @@ export default function TopBar(props) {
 			{redir ?
 				<Redirect to={{ pathname: '/FinalProject/' }} />
 				: ''}
-			<Link to='/' style={{ ...styles.barItem, ...styles.title }}>Fragflow</Link>
+			<Link to='/FinalProject/' style={{ ...styles.barItem, ...styles.title }}>Fragflow</Link>
 			{props.isSaved !== null ?
 				<>
 					<div style={styles.barItem}>{props.projName}</div>
@@ -66,7 +66,7 @@ export default function TopBar(props) {
 				</>
 				: ''}
 			{!path.includes('editor') ?
-				<Link to='/editor/new' style={{ ...styles.barItem, color: 'lightgray' }}>New Project</Link>
+				<Link to='/FinalProject/editor/new' style={{ ...styles.barItem, color: 'lightgray' }}>New Project</Link>
 				: ''}
 			{props.token ?
 				<>
@@ -84,8 +84,8 @@ export default function TopBar(props) {
 						</div>
 						: ''}
 					<div style={{ margin: 'auto' }}></div>
-					<Link to='/login' style={{ ...styles.barItem, color: 'lightgray' }}>Log In</Link>
-					<Link to='/register' style={{ ...styles.barItem, color: 'lightgray' }}>Register</Link>
+					<Link to='/FinalProject/login' style={{ ...styles.barItem, color: 'lightgray' }}>Log In</Link>
+					<Link to='/FinalProject/register' style={{ ...styles.barItem, color: 'lightgray' }}>Register</Link>
 				</>
 			}
 			<div style={{ margin: '20px' }}></div>
