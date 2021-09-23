@@ -1,5 +1,5 @@
 // Base URL for the server
-export const baseURL = 'http://localhost:5000';
+export const baseURL = 'https://fragflow.herokuapp.com';
 // Colors to use for various types of blocks
 export const colors = {function: 'darkcyan', main: 'blueviolet', action: 'midnightblue', text: 'white', raw: 'dimgray', variable: 'darkorange', input: 'orangered', output: 'mediumblue', border: 'white', math: 'green'};
 // Names to be replaced when displaying
